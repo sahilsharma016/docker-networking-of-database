@@ -1,0 +1,13 @@
+docker build -t docker_network . 
+docker run -p 5000:5000 flask_db_py
+
+docker inspect flask_db_py
+docker logs sqldb
+
+docker-compose ps 
+docker-compose ps -a
+docker-compose up 
+docker-compose up --build
+docker-compose down
+docker network create my-net
+docker network ls

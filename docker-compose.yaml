@@ -1,0 +1,62 @@
+# docker run -d --env MYSQL_ROOT_PASSWORD="root" --env MYSQL_DATABASE="database1" --name mysqldb --network my-net mysql
+# docker run -d --env MYSQL_ROOT_PASSWORD="root" --env MYSQL_DATABASE="database1" --name mysqldb11 --network my-net mysql
+
+      
+# version: '3.8'
+
+# services:
+#   mysqldb:
+#     image: mysql:latest
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=root
+#       - MYSQL_DATABASE=database1
+#     container_name: mysqldbcontainer
+#     ports:
+#       - "5000:5000"
+#     healthcheck:
+#       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+#       interval: 10s
+#       timeout: 20s
+#       retries: 10
+
+#   mypythonapp:
+#     build: ./
+#     container_name: apppy
+#     depends_on:
+#       mysqldb:
+#         condition: service_healthy
+
+
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=database1
+    container_name: mysqldbcontainer
+    # ports:
+    #   - "3306:3306"  # Mapping MySQL port
+    networks:
+      - my-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
+  mypythonapp:
+    build: ./
+    container_name: apppy
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    ports:
+      - "5000:5000"  # Mapping Flask app port
+    networks:
+      - my-net
+
+networks:
+  my-net:
+    driver: bridge

@@ -1,0 +1,7 @@
+# Ignore any unnecessary files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.Python
+*.docker
